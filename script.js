@@ -1,3 +1,10 @@
+// Add this constant outside the class
+const VIDEO_OEMBED_ENDPOINTS = {
+  youtube: (url) => `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`,
+  vimeo: (url) => `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(url)}`,
+  wistia: (url) => `https://fast.wistia.com/oembed?url=${encodeURIComponent(url)}&format=json`
+};
+
 class VideoThumbnailPreview {
     constructor(container) {
       this.container = container;
@@ -31,7 +38,7 @@ class VideoThumbnailPreview {
         if (data) {
           this.thumbnailOutput.innerHTML = `<img src="${data.thumbnail_url}" alt="Video thumbnail">`;
           this.dataOutput.textContent = JSON.stringify(data, null, 2);
-          this.urlOutput.textContent = url;
+          this.urlOutput.textContent = VIDEO_OEMBED_ENDPOINTS[videoProvider](url);
         } else {
           this.clearOutput();
         }
@@ -43,6 +50,7 @@ class VideoThumbnailPreview {
     clearOutput() {
       this.thumbnailOutput.innerHTML = '';
       this.dataOutput.innerHTML = '';
+      this.urlOutput.textContent = '';
     }
   
     detectVideoProvider(url) {
@@ -53,15 +61,10 @@ class VideoThumbnailPreview {
     }
   
     async fetchOembedData(url, provider) {
-      const endpoints = {
-        youtube: `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`,
-        vimeo: `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(url)}`,
-        wistia: `https://fast.wistia.com/oembed?url=${encodeURIComponent(url)}&format=json`
-      };
+      const endpointGenerator = VIDEO_OEMBED_ENDPOINTS[provider];
+      if (!endpointGenerator) return null;
   
-      const endpoint = endpoints[provider];
-      if (!endpoint) return null;
-  
+      const endpoint = endpointGenerator(url);
       const response = await fetch(endpoint);
       if (!response.ok) return null;
   

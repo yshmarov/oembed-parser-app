@@ -14,7 +14,6 @@ class VideoThumbnailPreview {
       this.urlOutput = container.querySelector('.video-url-output');
 
       this.dataTitleOutput = container.querySelector('.video-data-title-output');
-      this.dataThumbnailUrlOutput = container.querySelector('.video-data-thumbnail-url-output');
       this.dataHtmlOutput = container.querySelector('.video-data-html-output');
 
       // Bind event listeners
@@ -40,12 +39,15 @@ class VideoThumbnailPreview {
       try {
         const data = await this.fetchOembedData(url, videoProvider);
         if (data) {
-          this.thumbnailOutput.innerHTML = `<img src="${data.thumbnail_url}" alt="${data.title}">`;
+          this.thumbnailOutput.innerHTML = `
+            <figure>
+              <img src="${data.thumbnail_url}" alt="${data.title}">
+              <figcaption>${data.thumbnail_url}</figcaption>
+            </figure>`;
           this.dataOutput.textContent = JSON.stringify(data, null, 2);
           this.urlOutput.textContent = VIDEO_OEMBED_ENDPOINTS[videoProvider](url);
 
           this.dataTitleOutput.textContent = data.title;
-          this.dataThumbnailUrlOutput.textContent = data.thumbnail_url;
           this.dataHtmlOutput.innerHTML = data.html;
         } else {
           this.clearOutput();

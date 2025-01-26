@@ -53,6 +53,7 @@ class VideoThumbnailPreview {
           this.clearOutput();
         }
       } catch (error) {
+        console.error('Error fetching thumbnail:', error);
         this.clearOutput();
       }
     }
@@ -61,6 +62,8 @@ class VideoThumbnailPreview {
       this.thumbnailOutput.innerHTML = '';
       this.dataOutput.innerHTML = '';
       this.urlOutput.textContent = '';
+      this.dataTitleOutput.textContent = '';
+      this.dataHtmlOutput.innerHTML = '';
     }
   
     detectVideoProvider(url) {
@@ -84,6 +87,6 @@ class VideoThumbnailPreview {
   }
   
   document.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('#video-preview-container');
+    const container = document.getElementById('video-preview-container');
     window.videoPreview = new VideoThumbnailPreview(container);
   });

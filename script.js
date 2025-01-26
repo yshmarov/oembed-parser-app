@@ -15,6 +15,7 @@ class VideoThumbnailPreview {
 
       this.dataTitleOutput = container.querySelector('.video-data-title-output');
       this.dataHtmlOutput = container.querySelector('.video-data-html-output');
+      this.dataHtmlRawOutput = container.querySelector('.video-data-html-raw-output');
 
       // Bind event listeners
       this.input.addEventListener('input', () => this.fetchThumbnail());
@@ -49,6 +50,7 @@ class VideoThumbnailPreview {
 
           this.dataTitleOutput.textContent = data.title;
           this.dataHtmlOutput.innerHTML = data.html;
+          this.dataHtmlRawOutput.textContent = data.html.replace(/\\"/g, '"');
         } else {
           this.clearOutput();
         }
@@ -64,6 +66,7 @@ class VideoThumbnailPreview {
       this.urlOutput.textContent = '';
       this.dataTitleOutput.textContent = '';
       this.dataHtmlOutput.innerHTML = '';
+      this.dataHtmlRawOutput.textContent = '';
     }
   
     detectVideoProvider(url) {
